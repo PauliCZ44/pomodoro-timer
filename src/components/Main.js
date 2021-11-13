@@ -82,11 +82,11 @@ function Main(props) {
         <Countdown type="minutes" value={minutes}></Countdown>
         <Countdown type="seconds" value={seconds}></Countdown>
       </div>
-      <div className="flex p-4 place-content-center justify-center">
-        <button className="btn btn-primary m-2" onClick={toggleCount}>
+      <div className="flex p-4 gap-5 place-content-center justify-center">
+        <button className="btn btn-lg btn-primary" onClick={toggleCount}>
           {isCounting ? pauseButton : playButton}
         </button>
-        <button className="btn btn-warning m-2" onClick={resetCountdown}>
+        <button className="btn btn-lg btn-accent" onClick={resetCountdown}>
           <StopIcon className="h-6 w-6 mr-2" />
           Reset
         </button>

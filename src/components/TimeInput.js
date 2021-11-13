@@ -3,7 +3,7 @@ import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/outline";
 
 function TimeInput(props) {
   return (
-    <div className="form-control mx-3">
+    <div className="form-control">
       <label className="label justify-center">
         <span className="label-text">{props.label}</span>
       </label>
