@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 
 function Countdown(props) {
-  let [value, setValue] = useState("22");
-
   const style = {
-    "--value": value,
+    "--value": props.value,
   };
+
   return (
     <div className="flex flex-col p-2  justify-center bg-neutral rounded-box text-neutral-content">
-      <span className="font-mono text-5xl countdown">
+      <span className="font-mono text-7xl countdown">
         <span style={style}></span>
       </span>
       {props.type}

@@ -8,7 +8,7 @@ function Navbar(props) {
       </div>
       <div className="flex-1 px-2 mx-2">
         <div className="items-stretch hidden lg:flex">
-          <a className="btn btn-ghost btn-sm rounded-btn">About</a>
+          <span className="btn btn-ghost btn-sm rounded-btn">About</span>
         </div>
       </div>
     </div>
