@@ -1,13 +1,13 @@
-import logo from "./logo.svg";
-import "./App.css";
-import Navbar from "./components/navbar";
+import Navbar from "./components/Navbar";
+import Main from "./components/Main";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <div className="App">
       <Navbar />
-      <button className="btn btn-primary mx-5">daisyUI Button</button>
-      <button className="btn btn-primary rounded-full">daisyUI Button</button>
+      <Main />
+      <Footer />
     </div>
   );
 }

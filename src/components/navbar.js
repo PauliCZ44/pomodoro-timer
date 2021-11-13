@@ -4,7 +4,7 @@ function Navbar(props) {
   return (
     <div className="navbar mb-3 shadow-lg bg-neutral text-neutral-content ">
       <div className="flex-none px-2 mx-2">
-        <span className="text-lg font-bold">App name</span>
+        <span className="text-lg font-bold">Pomodoro timer</span>
       </div>
       <div className="flex-1 px-2 mx-2">
         <div className="items-stretch hidden lg:flex">
