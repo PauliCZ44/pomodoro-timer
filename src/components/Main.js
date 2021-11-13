@@ -59,9 +59,21 @@ function Main(props) {
     setMinutes(initValues.min);
   };
 
+  let pauseButton = (
+    <>
+      <PauseIcon className="h-6 w-6 mr-2" /> Pause
+    </>
+  );
+
+  let playButton = (
+    <>
+      <PlayIcon className="h-6 w-6 mr-2" /> Play
+    </>
+  );
+
   return (
-    <div className="place-self-center">
-      <div className="flex p-4 m-4 place-content-center">
+    <div className="sm:place-self-center">
+      <div className="flex flex-wrap gap-5 p-4 m-4 place-content-center">
         <TimeInput type="minutes" label="Minutes"></TimeInput>
         <TimeInput type="seconds" label="Seconds"></TimeInput>
       </div>
@@ -72,17 +84,7 @@ function Main(props) {
       </div>
       <div className="flex p-4 place-content-center justify-center">
         <button className="btn btn-primary m-2" onClick={toggleCount}>
-          {isCounting ? (
-            <>
-              <PauseIcon className="h-6 w-6 mr-2" />
-              Pause
-            </>
-          ) : (
-            <>
-              <PlayIcon className="h-6 w-6 mr-2" />
-              Play
-            </>
-          )}
+          {isCounting ? pauseButton : playButton}
         </button>
         <button className="btn btn-warning m-2" onClick={resetCountdown}>
           <StopIcon className="h-6 w-6 mr-2" />
