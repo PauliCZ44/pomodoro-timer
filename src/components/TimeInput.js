@@ -22,25 +22,32 @@ function TimeInput({ label, value, setTimeValue, type }) {
   function handleMinus() {
     if (val - 1 >= 0) {
       setVal((val) => +val - 1);
-      let newVal = (val) => +val - 1;
-      setTimeValue(type, newVal(val));
     }
   }
 
   function handlePlus() {
     if (val <= 98) {
       setVal((val) => +val + 1);
-      setTimeValue(type, +val + 1);
     }
   }
 
   function onChange(e) {
+    e.preventDefault();
     let val = e.target.value;
+    console.log(e);
     if (val.length < 3) {
       setVal(e.target.value);
-      setTimeValue(type, e.target.value);
     }
   }
+
+  useEffect(() => {
+    console.log("effect fire", val);
+    if (val < 0) {
+      setVal(0);
+    } else {
+      setTimeValue(type, val);
+    }
+  }, [val]);
 
   return (
     <div className="form-control">

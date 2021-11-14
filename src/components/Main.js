@@ -35,7 +35,6 @@ function Main(props) {
 
   function setTimeValue(type, val) {
     let path = type.split(".");
-    console.log("set val with", val, type, initValues[path[0]][path[1]]);
     initValues[path[0]][path[1]] = val;
     if (!isCounting && path[0] === "work") {
       if (path[1] === "min") {

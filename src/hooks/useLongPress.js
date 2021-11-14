@@ -10,7 +10,6 @@ export default function useLongPress({ onClick = () => {}, onLongPress = () => {
     intervalRef.current = setInterval(() => {
       onLongPress(eventRef.current);
     }, fireInterval);
-    onLongPress(eventRef.current);
     console.log("callback");
     eventRef.current = {};
     timerRef.current = false;
