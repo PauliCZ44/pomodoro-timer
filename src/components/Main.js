@@ -6,33 +6,54 @@ import { PauseIcon, PlayIcon, StopIcon } from "@heroicons/react/outline";
 
 function Main(props) {
   let initValues = {
-    sec: 0,
-    min: 25,
+    work: {
+      sec: 0,
+      min: 25,
+    },
+    break: {
+      sec: 0,
+      min: 5,
+    },
   };
-  const [seconds, setSeconds] = useState(initValues.sec);
-  const [minutes, setMinutes] = useState(initValues.min);
-  //const [mils, setMils] = useState(0);
+
+  const [seconds, setSeconds] = useState(initValues.work.sec);
+  const [minutes, setMinutes] = useState(initValues.work.min);
+
   const [isCounting, setIsCounting] = useState(false);
+  const [counterStatus, setCounterStatus] = useState("RESETED");
 
   const [intervalId, setIntervalId] = useState(0);
 
   const toggleCount = () => {
     if (isCounting) {
       pauseCounting();
+      setCounterStatus("PAUSED");
       return;
     }
     startCountDown();
   };
 
-  const startCountDown = () => {
-    if (!isCounting) {
-      setSeconds((seconds) => seconds - 1);
-      setIsCounting(true);
-      const intervalID = setInterval(() => {
-        setSeconds((seconds) => seconds - 1);
-      }, 1000);
-      setIntervalId(intervalID);
+  function setTimeValue(type, val) {
+    let path = type.split(".");
+    console.log("set val with", val, type, initValues[path[0]][path[1]]);
+    initValues[path[0]][path[1]] = val;
+    if (!isCounting && path[0] === "work") {
+      if (path[1] === "min") {
+        setMinutes(val);
+      } else {
+        setSeconds(val);
+      }
     }
+  }
+
+  const startCountDown = () => {
+    setSeconds((seconds) => seconds - 1);
+    setIsCounting(true);
+    setCounterStatus("WORKING");
+    const intervalID = setInterval(() => {
+      setSeconds((seconds) => seconds - 1);
+    }, 1000);
+    setIntervalId(intervalID);
   };
 
   /* Watching for seconds changes */
@@ -55,36 +76,56 @@ function Main(props) {
 
   const resetCountdown = () => {
     pauseCounting();
-    setSeconds(initValues.sec);
-    setMinutes(initValues.min);
+    setCounterStatus("RESETED");
+    setSeconds(initValues.work.sec);
+    setMinutes(initValues.work.min);
   };
-
-  let pauseButton = (
-    <>
-      <PauseIcon className="h-6 w-6 mr-2" /> Pause
-    </>
-  );
 
   let playButton = (
     <>
-      <PlayIcon className="h-6 w-6 mr-2" /> Play
+      <PlayIcon className="h-6 w-6 mr-2" /> Start
     </>
   );
 
+  if (!isCounting && counterStatus === "PAUSED") {
+    playButton = (
+      <>
+        <PlayIcon className="h-6 w-6 mr-2" /> Resume
+      </>
+    );
+  } else if (isCounting) {
+    playButton = (
+      <>
+        <PauseIcon className="h-6 w-6 mr-2" /> Pause
+      </>
+    );
+  }
+
   return (
     <div className="sm:place-self-center">
-      <div className="flex flex-wrap gap-5 p-4 m-4 place-content-center">
-        <TimeInput type="minutes" label="Minutes"></TimeInput>
-        <TimeInput type="seconds" label="Seconds"></TimeInput>
+      <h4 className="text-center ">Working time</h4>
+      <div className="flex flex-wrap gap-5 pb-4 mb-4 place-content-center">
+        <TimeInput type="work.min" label="Minutes" value={initValues.work.min} setTimeValue={setTimeValue}></TimeInput>
+        <TimeInput type="work.sec" label="Seconds" value={initValues.work.sec} setTimeValue={setTimeValue}></TimeInput>
       </div>
 
-      <div className="grid grid-flow-col gap-5 text-center auto-cols-max justify-center  bg-white bg-opacity-5 py-12 my-12 rounded-lg">
-        <Countdown type="minutes" value={minutes}></Countdown>
-        <Countdown type="seconds" value={seconds}></Countdown>
+      <h4 className="text-center">Break time</h4>
+      <div className="flex flex-wrap gap-5 pb-4 mb-4 place-content-center">
+        <TimeInput type="break.min" label="Minutes" value={initValues.break.min} setTimeValue={setTimeValue}></TimeInput>
+        <TimeInput type="break.sec" label="Seconds" value={initValues.break.sec} setTimeValue={setTimeValue}></TimeInput>
       </div>
+
+      <div className=" bg-white bg-opacity-5 pt-12 pb-6 my-12 rounded-lg">
+        <div className="grid grid-flow-col gap-5 text-center auto-cols-max justify-center ">
+          <Countdown type="minutes" value={minutes}></Countdown>
+          <Countdown type="seconds" value={seconds}></Countdown>
+        </div>
+        <h3 className="text-center h3 pt-6">{counterStatus}</h3>
+      </div>
+
       <div className="flex p-4 gap-5 place-content-center justify-center">
         <button className="btn btn-lg btn-primary" onClick={toggleCount}>
-          {isCounting ? pauseButton : playButton}
+          {playButton}
         </button>
         <button className="btn btn-lg btn-accent" onClick={resetCountdown}>
           <StopIcon className="h-6 w-6 mr-2" />
