@@ -5,19 +5,17 @@ import TimeInput from "./TimeInput";
 import { PauseIcon, PlayIcon, StopIcon } from "@heroicons/react/outline";
 
 function Main(props) {
-  let initValues = {
-    work: {
-      sec: 0,
-      min: 25,
-    },
-    break: {
-      sec: 0,
-      min: 5,
-    },
-  };
+  const [workTime, setWorkTime] = useState({
+    min: 25,
+    sec: 0,
+  });
+  const [restTime, setrestTime] = useState({
+    min: 5,
+    sec: 0,
+  });
 
-  const [seconds, setSeconds] = useState(initValues.work.sec);
-  const [minutes, setMinutes] = useState(initValues.work.min);
+  const [seconds, setSeconds] = useState(workTime.sec);
+  const [minutes, setMinutes] = useState(workTime.min);
 
   const [isCounting, setIsCounting] = useState(false);
   const [counterStatus, setCounterStatus] = useState("RESETED");
@@ -34,15 +32,26 @@ function Main(props) {
   };
 
   function setTimeValue(type, val) {
-    let path = type.split(".");
-    initValues[path[0]][path[1]] = val;
-    if (!isCounting && path[0] === "work") {
-      if (path[1] === "min") {
-        setMinutes(val);
-      } else {
-        setSeconds(val);
-      }
+    switch (type) {
+      case "work.min":
+        setWorkTime({ ...workTime, min: val });
+        if (!isCounting) setMinutes(val);
+        break;
+      case "work.sec":
+        setWorkTime({ ...workTime, sec: val });
+        if (!isCounting) setSeconds(val);
+        break;
+      case "rest.min":
+        setrestTime({ ...restTime, min: val });
+        break;
+      case "rest.sec":
+        setrestTime({ ...restTime, sec: val });
+        break;
+
+      default:
+        break;
     }
+    console.log(workTime, restTime);
   }
 
   const startCountDown = () => {
@@ -57,10 +66,16 @@ function Main(props) {
 
   /* Watching for seconds changes */
   useEffect(() => {
-    if (seconds === -1) {
-      console.log("zero sec");
+    console.log(minutes, ":", seconds);
+    if (seconds === -1 && minutes != 0) {
       setMinutes((minutes) => minutes - 1);
       setSeconds(59);
+    } else if (seconds === -1 && minutes === 0) {
+      if (counterStatus === "WORKING") {
+        switchToRest();
+      } else if (counterStatus === "RESTING") {
+        switchToWork();
+      }
     }
   }, [seconds]);
 
@@ -76,8 +91,20 @@ function Main(props) {
   const resetCountdown = () => {
     pauseCounting();
     setCounterStatus("RESETED");
-    setSeconds(initValues.work.sec);
-    setMinutes(initValues.work.min);
+    setSeconds(workTime.sec);
+    setMinutes(workTime.min);
+  };
+
+  const switchToWork = () => {
+    setCounterStatus("WORKING");
+    setMinutes(workTime.min);
+    setSeconds(workTime.sec);
+  };
+
+  const switchToRest = () => {
+    setCounterStatus("RESTING");
+    setMinutes(restTime.min);
+    setSeconds(restTime.sec);
   };
 
   let playButton = (
@@ -102,16 +129,16 @@ function Main(props) {
 
   return (
     <div className="sm:place-self-center">
-      <h4 className="text-center ">Working time</h4>
+      <h4 className="text-center ">Work time</h4>
       <div className="flex flex-wrap gap-5 pb-4 mb-4 place-content-center">
-        <TimeInput type="work.min" label="Minutes" value={initValues.work.min} setTimeValue={setTimeValue}></TimeInput>
-        <TimeInput type="work.sec" label="Seconds" value={initValues.work.sec} setTimeValue={setTimeValue}></TimeInput>
+        <TimeInput type="work.min" label="Minutes" value={workTime.min} setTimeValue={setTimeValue}></TimeInput>
+        <TimeInput type="work.sec" label="Seconds" value={workTime.sec} setTimeValue={setTimeValue}></TimeInput>
       </div>
 
       <h4 className="text-center">Break time</h4>
       <div className="flex flex-wrap gap-5 pb-4 mb-4 place-content-center">
-        <TimeInput type="break.min" label="Minutes" value={initValues.break.min} setTimeValue={setTimeValue}></TimeInput>
-        <TimeInput type="break.sec" label="Seconds" value={initValues.break.sec} setTimeValue={setTimeValue}></TimeInput>
+        <TimeInput type="rest.min" label="Minutes" value={restTime.min} setTimeValue={setTimeValue}></TimeInput>
+        <TimeInput type="rest.sec" label="Seconds" value={restTime.sec} setTimeValue={setTimeValue}></TimeInput>
       </div>
 
       <div className=" bg-white bg-opacity-5 pt-12 pb-6 my-12 rounded-lg">

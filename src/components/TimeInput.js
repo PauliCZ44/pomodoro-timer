@@ -34,14 +34,13 @@ function TimeInput({ label, value, setTimeValue, type }) {
   function onChange(e) {
     e.preventDefault();
     let val = e.target.value;
-    console.log(e);
     if (val.length < 3) {
       setVal(e.target.value);
     }
   }
 
   useEffect(() => {
-    console.log("effect fire", val);
+    //console.log("effect fire", val);
     if (val < 0) {
       setVal(0);
     } else {
