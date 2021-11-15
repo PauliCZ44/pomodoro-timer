@@ -3,7 +3,7 @@ import useLongPress from "../hooks/useLongPress";
 
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/outline";
 
-function TimeInput({ label, value, setTimeValue, type }) {
+function TimeInput({ label, value, setTimeValue, type, id }) {
   let [val, setVal] = useState(value);
   let min = 0;
   let max = 99;
@@ -26,7 +26,7 @@ function TimeInput({ label, value, setTimeValue, type }) {
   }
 
   function handlePlus() {
-    if (val <= 98) {
+    if (val <= 60) {
       setVal((val) => +val + 1);
     }
   }
@@ -54,11 +54,20 @@ function TimeInput({ label, value, setTimeValue, type }) {
         <span className="label-text">{label}</span>
       </label>
       <div className="relative shadow-custom">
-        <button className="absolute top-0 left-0 rounded-r-none btn btn-primary px-3" {...longPressPlus}>
+        <button className="absolute top-0 left-0 rounded-r-none btn btn-primary px-3" id={id + "-increment"} {...longPressPlus}>
           <PlusCircleIcon className="h-6 w-6  text-neutral-content" />
         </button>
-        <input type="number" placeholder={label} className="w-40 px-2 text-center input input-primary input-bordered text-base" value={val} min={min} max={max} onChange={onChange} />
-        <button className="absolute top-0 right-0 rounded-l-none btn btn-primary px-3" {...longPressMinus}>
+        <input
+          type="number"
+          placeholder={label}
+          className="w-40 px-2 text-center input input-primary input-bordered text-base"
+          value={val}
+          min={min}
+          max={max}
+          onChange={onChange}
+          id={id + "-length"}
+        />
+        <button className="absolute top-0 right-0 rounded-l-none btn btn-primary px-3" id={id + "-decrement"} {...longPressMinus}>
           <MinusCircleIcon className="h-6 w-6  text-neutral-content" />
         </button>
       </div>

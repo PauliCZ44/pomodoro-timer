@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Countdown from "./Countdown";
-import TimeInput from "./TimeInput";
 import SessionTime from "./SessionTime";
 import CountdownWrapper from "./CountdownWrapper";
+import quotes from "../quotes";
+import useAudio from "../hooks/useAudio";
+import audio from "../assets/bell.wav";
 
 import { PauseIcon, PlayIcon, StopIcon } from "@heroicons/react/outline";
 
@@ -15,6 +16,11 @@ function Main(props) {
     min: 5,
     sec: 0,
   });
+  let randNum = () => {
+    return Math.floor(quotes.length * Math.random());
+  };
+
+  const [playing, togglePlay] = useAudio(audio);
 
   const [seconds, setSeconds] = useState(workTime.sec);
   const [minutes, setMinutes] = useState(workTime.min);
@@ -22,8 +28,10 @@ function Main(props) {
   const [intervalId, setIntervalId] = useState(0);
   const [counterStatus, setCounterStatus] = useState("RESETED");
   const [prevCounterStatus, setPrevCounterStatus] = useState("WORKING");
+  const [qIndex, setQIndex] = useState(randNum());
 
   const toggleCount = () => {
+    setQIndex(randNum());
     if (isCounting) {
       pauseCounting();
       setCounterStatus("PAUSED");
@@ -93,6 +101,7 @@ function Main(props) {
   };
 
   const resetCountdown = () => {
+    setQIndex(randNum());
     pauseCounting();
     setCounterStatus("RESETED");
     setPrevCounterStatus("WORKING");
@@ -101,6 +110,7 @@ function Main(props) {
   };
 
   const switchToWork = () => {
+    togglePlay();
     setPrevCounterStatus("WORKING");
     setCounterStatus("WORKING");
     setMinutes(workTime.min);
@@ -108,6 +118,7 @@ function Main(props) {
   };
 
   const switchToRest = () => {
+    togglePlay();
     setPrevCounterStatus("RESTING");
     setCounterStatus("RESTING");
     setMinutes(restTime.min);
@@ -135,17 +146,17 @@ function Main(props) {
   }
 
   return (
-    <div className="sm:place-self-center">
-      <div className="flex gap-5 md:gap-16 justify-items-end">
-        <SessionTime header="Working session length" type="work" minutes={workTime.min} seconds={workTime.sec} setTimeValue={setTimeValue} />
-        <SessionTime header="Resting session length" type="rest" minutes={workTime.min} seconds={workTime.sec} setTimeValue={setTimeValue} />
+    <div className="sm:place-self-center main-layout">
+      <div className="flex gap-5 md:gap-16 justify-center">
+        <SessionTime header="Working session length" type="work" minutes={workTime.min} seconds={workTime.sec} setTimeValue={setTimeValue} id="session" />
+        <SessionTime header="Resting session length" type="rest" minutes={restTime.min} seconds={restTime.sec} setTimeValue={setTimeValue} id="break" />
       </div>
-      <CountdownWrapper minutes={minutes} seconds={seconds} counterStatus={counterStatus} />
+      <CountdownWrapper minutes={minutes} seconds={seconds} counterStatus={counterStatus} qIndex={qIndex} />
       <div className="flex p-4 gap-5 place-content-center justify-center">
-        <button className="btn btn-lg btn-primary shadow-button" onClick={toggleCount}>
+        <button className="btn btn-lg btn-primary shadow-button" onClick={toggleCount} id="start_stop">
           {playButton}
         </button>
-        <button className="btn btn-lg btn-accent shadow-button" onClick={resetCountdown}>
+        <button className="btn btn-lg btn-accent shadow-button" onClick={resetCountdown} id="reset">
           <StopIcon className="h-6 w-6 mr-2" />
           Reset
         </button>

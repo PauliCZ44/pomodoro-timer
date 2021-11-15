@@ -79,3 +79,13 @@ input[type="number"] {
 .p-md {
   padding: min(2rem, 3vw);
 }
+
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-layout > * {
+  width: clamp(360px, 50rem, 94vw);
+}
