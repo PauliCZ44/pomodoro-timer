@@ -5,10 +5,10 @@ import quotes from "../quotes";
 
 function CountdownWrapper({ minutes, seconds, counterStatus, qIndex }) {
   let classes = "bg-white bg-opacity-5";
-  let message = <h3 className="text-center h4 pt-14 pb-10">"Press 'START' to start your session"</h3>;
+  let message = <h4 className="text-center pt-14 pb-10 text-opacity-70  text-neutral-content">Press 'START' to start your session</h4>;
   let quote = null;
   if (counterStatus === "RESTING") {
-    message = <h3 className="text-center h4 pt-14 pb-10">"It's time to get some rest"</h3>;
+    message = <h4 className="text-center pt-14 pb-10">It's time to get some rest</h4>;
     classes = "bg-blue-400 bg-opacity-40";
     quote = null;
   } else if (counterStatus === "WORKING") {

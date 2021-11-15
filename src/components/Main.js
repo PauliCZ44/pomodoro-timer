@@ -4,6 +4,7 @@ import CountdownWrapper from "./CountdownWrapper";
 import quotes from "../quotes";
 import useAudio from "../hooks/useAudio";
 import audio from "../assets/bell.wav";
+import audio2 from "../assets/bell2.wav";
 
 import { PauseIcon, PlayIcon, StopIcon } from "@heroicons/react/outline";
 
@@ -21,6 +22,7 @@ function Main(props) {
   };
 
   const [playing, togglePlay] = useAudio(audio);
+  const [playing2, togglePlay2] = useAudio(audio2);
 
   const [seconds, setSeconds] = useState(workTime.sec);
   const [minutes, setMinutes] = useState(workTime.min);
@@ -118,7 +120,7 @@ function Main(props) {
   };
 
   const switchToRest = () => {
-    togglePlay();
+    togglePlay2();
     setPrevCounterStatus("RESTING");
     setCounterStatus("RESTING");
     setMinutes(restTime.min);
@@ -148,8 +150,8 @@ function Main(props) {
   return (
     <div className="sm:place-self-center main-layout">
       <div className="flex gap-5 md:gap-16 justify-center">
-        <SessionTime header="Working session length" type="work" minutes={workTime.min} seconds={workTime.sec} setTimeValue={setTimeValue} id="session" />
-        <SessionTime header="Resting session length" type="rest" minutes={restTime.min} seconds={restTime.sec} setTimeValue={setTimeValue} id="break" />
+        <SessionTime header="Working session" type="work" minutes={workTime.min} seconds={workTime.sec} setTimeValue={setTimeValue} id="session" />
+        <SessionTime header="Resting session" type="rest" minutes={restTime.min} seconds={restTime.sec} setTimeValue={setTimeValue} id="break" />
       </div>
       <CountdownWrapper minutes={minutes} seconds={seconds} counterStatus={counterStatus} qIndex={qIndex} />
       <div className="flex p-4 gap-5 place-content-center justify-center">
