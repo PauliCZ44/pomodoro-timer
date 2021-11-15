@@ -23,11 +23,12 @@ function CountdownWrapper({ minutes, seconds, counterStatus, qIndex }) {
   }
 
   return (
-    <div className={classes + "  pt-8 md:pt-12 pb-4 md:pb-6 my-6 md:my-12 rounded-lg  shadow-custom transition duration-1000 "} id="timer-label">
+    <div className={classes + "  pt-8 md:pt-12 pb-4 md:pb-6 my-6 md:my-12 rounded-lg  shadow-custom transition ease-in-out duration-2000 "} id="timer-label">
       <div className="grid grid-flow-col gap-5 text-center auto-cols-max justify-center ">
         <Countdown type="minutes" value={minutes}></Countdown>
         <Countdown type="seconds" value={seconds}></Countdown>
-        <div id="time-left" className="text-opacity-0 text-black absolute ">
+        <div id="time-left" className="text-opacity-50 text-black absolute" value={minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0")}>
+          {/* set opacity to 100 before build */}
           {minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0")}
         </div>
       </div>

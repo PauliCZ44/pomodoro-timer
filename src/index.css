@@ -89,3 +89,7 @@ input[type="number"] {
 .main-layout > * {
   width: clamp(360px, 50rem, 94vw);
 }
+
+.duration-2000 {
+  transition-duration: 2000ms;
+}

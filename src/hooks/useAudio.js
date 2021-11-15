@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
-const useAudio = (url) => {
+const useAudio = (url, id = "beep") => {
   const [audio] = useState(new Audio(url));
   const [playing, setPlaying] = useState(false);
-
+  audio.setAttribute("id", id);
   const toggle = () => setPlaying(!playing);
 
   useEffect(() => {
