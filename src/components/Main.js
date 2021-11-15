@@ -16,11 +16,10 @@ function Main(props) {
 
   const [seconds, setSeconds] = useState(workTime.sec);
   const [minutes, setMinutes] = useState(workTime.min);
-
   const [isCounting, setIsCounting] = useState(false);
-  const [counterStatus, setCounterStatus] = useState("RESETED");
-
   const [intervalId, setIntervalId] = useState(0);
+  const [counterStatus, setCounterStatus] = useState("RESETED");
+  const [prevCounterStatus, setPrevCounterStatus] = useState("WORK");
 
   const toggleCount = () => {
     if (isCounting) {
@@ -37,13 +36,16 @@ function Main(props) {
         setWorkTime({ ...workTime, min: val });
         if (!isCounting) setMinutes(val);
         break;
+
       case "work.sec":
         setWorkTime({ ...workTime, sec: val });
         if (!isCounting) setSeconds(val);
         break;
+
       case "rest.min":
         setrestTime({ ...restTime, min: val });
         break;
+
       case "rest.sec":
         setrestTime({ ...restTime, sec: val });
         break;
@@ -57,7 +59,7 @@ function Main(props) {
   const startCountDown = () => {
     setSeconds((seconds) => seconds - 1);
     setIsCounting(true);
-    setCounterStatus("WORKING");
+    setCounterStatus(prevCounterStatus);
     const intervalID = setInterval(() => {
       setSeconds((seconds) => seconds - 1);
     }, 1000);
@@ -67,7 +69,7 @@ function Main(props) {
   /* Watching for seconds changes */
   useEffect(() => {
     console.log(minutes, ":", seconds);
-    if (seconds === -1 && minutes != 0) {
+    if (seconds === -1 && minutes !== 0) {
       setMinutes((minutes) => minutes - 1);
       setSeconds(59);
     } else if (seconds === -1 && minutes === 0) {
@@ -91,17 +93,20 @@ function Main(props) {
   const resetCountdown = () => {
     pauseCounting();
     setCounterStatus("RESETED");
+    setPrevCounterStatus("WORK");
     setSeconds(workTime.sec);
     setMinutes(workTime.min);
   };
 
   const switchToWork = () => {
+    setPrevCounterStatus("WORK");
     setCounterStatus("WORKING");
     setMinutes(workTime.min);
     setSeconds(workTime.sec);
   };
 
   const switchToRest = () => {
+    setPrevCounterStatus("REST");
     setCounterStatus("RESTING");
     setMinutes(restTime.min);
     setSeconds(restTime.sec);
@@ -129,18 +134,22 @@ function Main(props) {
 
   return (
     <div className="sm:place-self-center">
-      <h4 className="text-center ">Work time</h4>
-      <div className="flex flex-wrap gap-5 pb-4 mb-4 place-content-center">
-        <TimeInput type="work.min" label="Minutes" value={workTime.min} setTimeValue={setTimeValue}></TimeInput>
-        <TimeInput type="work.sec" label="Seconds" value={workTime.sec} setTimeValue={setTimeValue}></TimeInput>
+      <div className="flex gap-5 md:gap-16 justify-items-end">
+        <div>
+          <h4 className="text-center ">Work time</h4>
+          <div className="flex flex-wrap gap-y-3 gap-x-5 pb-4 mb-4 place-content-center">
+            <TimeInput type="work.min" label="Minutes" value={workTime.min} setTimeValue={setTimeValue}></TimeInput>
+            <TimeInput type="work.sec" label="Seconds" value={workTime.sec} setTimeValue={setTimeValue}></TimeInput>
+          </div>
+        </div>
+        <div>
+          <h4 className="text-center">Break time</h4>
+          <div className="flex flex-wrap gap-y-3 gap-x-5 pb-4 mb-4 place-content-center">
+            <TimeInput type="rest.min" label="Minutes" value={restTime.min} setTimeValue={setTimeValue}></TimeInput>
+            <TimeInput type="rest.sec" label="Seconds" value={restTime.sec} setTimeValue={setTimeValue}></TimeInput>
+          </div>
+        </div>
       </div>
-
-      <h4 className="text-center">Break time</h4>
-      <div className="flex flex-wrap gap-5 pb-4 mb-4 place-content-center">
-        <TimeInput type="rest.min" label="Minutes" value={restTime.min} setTimeValue={setTimeValue}></TimeInput>
-        <TimeInput type="rest.sec" label="Seconds" value={restTime.sec} setTimeValue={setTimeValue}></TimeInput>
-      </div>
-
       <div className=" bg-white bg-opacity-5 pt-12 pb-6 my-12 rounded-lg">
         <div className="grid grid-flow-col gap-5 text-center auto-cols-max justify-center ">
           <Countdown type="minutes" value={minutes}></Countdown>
