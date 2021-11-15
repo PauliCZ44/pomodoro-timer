@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Countdown from "./Countdown";
 import TimeInput from "./TimeInput";
+import SessionTime from "./SessionTime";
+import CountdownWrapper from "./CountdownWrapper";
 
 import { PauseIcon, PlayIcon, StopIcon } from "@heroicons/react/outline";
 
@@ -19,7 +21,7 @@ function Main(props) {
   const [isCounting, setIsCounting] = useState(false);
   const [intervalId, setIntervalId] = useState(0);
   const [counterStatus, setCounterStatus] = useState("RESETED");
-  const [prevCounterStatus, setPrevCounterStatus] = useState("WORK");
+  const [prevCounterStatus, setPrevCounterStatus] = useState("WORKING");
 
   const toggleCount = () => {
     if (isCounting) {
@@ -53,7 +55,6 @@ function Main(props) {
       default:
         break;
     }
-    console.log(workTime, restTime);
   }
 
   const startCountDown = () => {
@@ -73,6 +74,7 @@ function Main(props) {
       setMinutes((minutes) => minutes - 1);
       setSeconds(59);
     } else if (seconds === -1 && minutes === 0) {
+      console.log("Switch status");
       if (counterStatus === "WORKING") {
         switchToRest();
       } else if (counterStatus === "RESTING") {
@@ -93,20 +95,20 @@ function Main(props) {
   const resetCountdown = () => {
     pauseCounting();
     setCounterStatus("RESETED");
-    setPrevCounterStatus("WORK");
+    setPrevCounterStatus("WORKING");
     setSeconds(workTime.sec);
     setMinutes(workTime.min);
   };
 
   const switchToWork = () => {
-    setPrevCounterStatus("WORK");
+    setPrevCounterStatus("WORKING");
     setCounterStatus("WORKING");
     setMinutes(workTime.min);
     setSeconds(workTime.sec);
   };
 
   const switchToRest = () => {
-    setPrevCounterStatus("REST");
+    setPrevCounterStatus("RESTING");
     setCounterStatus("RESTING");
     setMinutes(restTime.min);
     setSeconds(restTime.sec);
@@ -135,34 +137,15 @@ function Main(props) {
   return (
     <div className="sm:place-self-center">
       <div className="flex gap-5 md:gap-16 justify-items-end">
-        <div>
-          <h4 className="text-center ">Work time</h4>
-          <div className="flex flex-wrap gap-y-3 gap-x-5 pb-4 mb-4 place-content-center">
-            <TimeInput type="work.min" label="Minutes" value={workTime.min} setTimeValue={setTimeValue}></TimeInput>
-            <TimeInput type="work.sec" label="Seconds" value={workTime.sec} setTimeValue={setTimeValue}></TimeInput>
-          </div>
-        </div>
-        <div>
-          <h4 className="text-center">Break time</h4>
-          <div className="flex flex-wrap gap-y-3 gap-x-5 pb-4 mb-4 place-content-center">
-            <TimeInput type="rest.min" label="Minutes" value={restTime.min} setTimeValue={setTimeValue}></TimeInput>
-            <TimeInput type="rest.sec" label="Seconds" value={restTime.sec} setTimeValue={setTimeValue}></TimeInput>
-          </div>
-        </div>
+        <SessionTime header="Working session length" type="work" minutes={workTime.min} seconds={workTime.sec} setTimeValue={setTimeValue} />
+        <SessionTime header="Resting session length" type="rest" minutes={workTime.min} seconds={workTime.sec} setTimeValue={setTimeValue} />
       </div>
-      <div className=" bg-white bg-opacity-5 pt-12 pb-6 my-12 rounded-lg">
-        <div className="grid grid-flow-col gap-5 text-center auto-cols-max justify-center ">
-          <Countdown type="minutes" value={minutes}></Countdown>
-          <Countdown type="seconds" value={seconds}></Countdown>
-        </div>
-        <h3 className="text-center h3 pt-6">{counterStatus}</h3>
-      </div>
-
+      <CountdownWrapper minutes={minutes} seconds={seconds} counterStatus={counterStatus} />
       <div className="flex p-4 gap-5 place-content-center justify-center">
-        <button className="btn btn-lg btn-primary" onClick={toggleCount}>
+        <button className="btn btn-lg btn-primary shadow-button" onClick={toggleCount}>
           {playButton}
         </button>
-        <button className="btn btn-lg btn-accent" onClick={resetCountdown}>
+        <button className="btn btn-lg btn-accent shadow-button" onClick={resetCountdown}>
           <StopIcon className="h-6 w-6 mr-2" />
           Reset
         </button>

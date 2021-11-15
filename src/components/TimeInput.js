@@ -35,7 +35,7 @@ function TimeInput({ label, value, setTimeValue, type }) {
     e.preventDefault();
     let val = e.target.value;
     if (val.length < 3) {
-      setVal(e.target.value);
+      setVal(+e.target.value);
     }
   }
 
@@ -44,7 +44,7 @@ function TimeInput({ label, value, setTimeValue, type }) {
     if (val < 0) {
       setVal(0);
     } else {
-      setTimeValue(type, val);
+      setTimeValue(type, +val);
     }
   }, [val]);
 
@@ -53,7 +53,7 @@ function TimeInput({ label, value, setTimeValue, type }) {
       <label className="label justify-center">
         <span className="label-text">{label}</span>
       </label>
-      <div className="relative">
+      <div className="relative shadow-custom">
         <button className="absolute top-0 left-0 rounded-r-none btn btn-primary px-3" {...longPressPlus}>
           <PlusCircleIcon className="h-6 w-6  text-neutral-content" />
         </button>
