@@ -17,7 +17,7 @@ const useAudio = (url, id = "beep") => {
     };
   }, []);
 
-  return [playing, toggle];
+  return [playing, toggle, audio];
 };
 
 export default useAudio;

@@ -5,6 +5,7 @@ import quotes from "../quotes";
 import useAudio from "../hooks/useAudio";
 import audio from "../assets/bell.wav";
 import audio2 from "../assets/bell2.wav";
+// audio files credit: https://freesound.org/people/tec_studio/sounds/361496/
 
 import { PauseIcon, PlayIcon, StopIcon } from "@heroicons/react/outline";
 
@@ -80,6 +81,7 @@ function Main(props) {
   /* Watching for seconds changes */
   useEffect(() => {
     console.log(minutes, ":", seconds);
+    document.title = `${counterStatus} (${minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0")})`;
     if (seconds === -1 && minutes !== 0) {
       setMinutes((minutes) => minutes - 1);
       setSeconds(59);
@@ -94,6 +96,7 @@ function Main(props) {
   }, [seconds]);
 
   const pauseCounting = () => {
+    document.title = "PAUSED (" + minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0") + ")";
     setIsCounting(false);
     if (intervalId) {
       clearInterval(intervalId);
@@ -103,6 +106,7 @@ function Main(props) {
   };
 
   const resetCountdown = () => {
+    document.title = "Pomodoro timer";
     setQIndex(randNum());
     pauseCounting();
     setCounterStatus("RESETED");
@@ -149,12 +153,12 @@ function Main(props) {
 
   return (
     <div className="sm:place-self-center main-layout">
-      <div className="flex gap-5 md:gap-16 justify-center">
+      <div className="flex gap-5 md:gap-16 justify-between">
         <SessionTime header="Working session" type="work" minutes={workTime.min} seconds={workTime.sec} setTimeValue={setTimeValue} id="session" />
         <SessionTime header="Resting session" type="rest" minutes={restTime.min} seconds={restTime.sec} setTimeValue={setTimeValue} id="break" />
       </div>
       <CountdownWrapper minutes={minutes} seconds={seconds} counterStatus={counterStatus} qIndex={qIndex} />
-      <div className="flex p-4 gap-5 place-content-center justify-center">
+      <div className="flex pb-4 pt-1 gap-5 place-content-center justify-center">
         <button className="btn btn-lg btn-primary shadow-button" onClick={toggleCount} id="start_stop">
           {playButton}
         </button>

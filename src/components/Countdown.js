@@ -6,9 +6,9 @@ function Countdown(props) {
   };
 
   return (
-    <div className="flex flex-col p-2  justify-center bg-neutral rounded-box text-neutral-content">
-      <span className="font-mono text-7xl countdown">
-        <span style={style}></span>
+    <div className="flex flex-col p-2 shadow-lg justify-center bg-neutral rounded-box text-neutral-content bg-opacity-90">
+      <span className="font-mono text-7xl countdown fs-80">
+        <span style={style} className=""></span>
       </span>
       {props.type}
     </div>
