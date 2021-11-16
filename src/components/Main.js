@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import SessionTime from "./SessionTime";
 import CountdownWrapper from "./CountdownWrapper";
+import Settings from "./Settings";
+
 import quotes from "../quotes";
 import useAudio from "../hooks/useAudio";
 import audio from "../assets/bell.wav";
@@ -152,21 +154,23 @@ function Main(props) {
   }
 
   return (
-    <div className="sm:place-self-center main-layout">
-      <div className="flex gap-5 md:gap-16 justify-between">
-        <SessionTime header="Working session" type="work" minutes={workTime.min} seconds={workTime.sec} setTimeValue={setTimeValue} id="session" />
-        <SessionTime header="Resting session" type="rest" minutes={restTime.min} seconds={restTime.sec} setTimeValue={setTimeValue} id="break" />
-      </div>
+    <div className="main-layout">
       <CountdownWrapper minutes={minutes} seconds={seconds} counterStatus={counterStatus} qIndex={qIndex} />
-      <div className="flex pb-4 pt-1 gap-5 place-content-center justify-center">
-        <button className="btn btn-lg btn-primary shadow-button" onClick={toggleCount} id="start_stop">
+      <div className="flex py-4 gap-5 place-content-center justify-center">
+        <button className="btn btn-lg btn-primary shadow-button sm:px-10" onClick={toggleCount} id="start_stop">
           {playButton}
         </button>
-        <button className="btn btn-lg btn-accent shadow-button" onClick={resetCountdown} id="reset">
+        <button className="btn btn-lg btn-accent shadow-button sm:px-10" onClick={resetCountdown} id="reset">
           <StopIcon className="h-6 w-6 mr-2" />
           Reset
         </button>
       </div>
+      <Settings class="">
+        <div className="flex gap-0.5 pt-0 justify-between">
+          <SessionTime header="Working session" type="work" minutes={workTime.min} seconds={workTime.sec} setTimeValue={setTimeValue} id="session" />
+          <SessionTime header="Resting session" type="rest" minutes={restTime.min} seconds={restTime.sec} setTimeValue={setTimeValue} id="break" />
+        </div>
+      </Settings>
     </div>
   );
 }

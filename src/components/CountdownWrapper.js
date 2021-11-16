@@ -32,7 +32,7 @@ function CountdownWrapper({ minutes, seconds, counterStatus, qIndex }) {
         // handle success here
         const photoSrc = result.response;
         setPhoto(photoSrc);
-        console.log(photoSrc);
+        // console.log(photoSrc);
         setStyle({ backgroundImage: `url(${photoSrc[0].urls.regular})` });
       }
     });
@@ -60,12 +60,17 @@ function CountdownWrapper({ minutes, seconds, counterStatus, qIndex }) {
 
   let credits = null;
   if (photo) {
-    credits = <div className="unsplash-credits">{"Photo created by:" + photo[0].user.name + " from unsplash.com"}</div>;
+    credits = (
+      <div className="unsplash-credits">
+        Photo created by: <a href={photo[0].user.links.html + "?utm_source=pomodorosimple&utm_medium=referral"}>{photo[0].user.name} </a>
+        on <a href="https://unsplash.com/?utm_source=pomodorosimple&utm_medium=referral">Unsplash</a>
+      </div>
+    );
   }
 
   return (
-    <div style={style} className=" my-6 rounded-lg bgimage-centered">
-      <div className={classes + " " + "h-full pt-8 pb-4 rounded-lg md:pt-12 md:pb-6 shadow-custom transition ease-in-out duration-2000 "} id="timer-label">
+    <div style={style} className=" my-4 rounded-lg bgimage-centered relative flex-grow">
+      <div className={classes + " " + "h-full pt-8 pb-4 rounded-lg md:pt-12 md:pb-6 shadow-custom transition ease-in-out duration-2000 flex flex-col"} id="timer-label">
         <div className="grid grid-flow-col gap-5 text-center auto-cols-max justify-center ">
           <Countdown type="minutes" value={minutes}></Countdown>
           <Countdown type="seconds" value={seconds}></Countdown>
@@ -74,8 +79,11 @@ function CountdownWrapper({ minutes, seconds, counterStatus, qIndex }) {
             {minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0")}
           </div>
         </div>
-        {message}
-        {quote && quote}
+        <div className="my-auto">
+          {message}
+          {quote && quote}
+        </div>
+
         {credits}
       </div>
     </div>
